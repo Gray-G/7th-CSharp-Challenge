@@ -25,7 +25,7 @@
         <asp:Label ID="resultLabel" runat="server"></asp:Label>
         <br />
         <br />
-        <asp:Label ID="moneyLabel" runat="server"></asp:Label>
+        <asp:Label ID="walletLabel" runat="server"></asp:Label>
         <br />
         <br />
         1 Cherry - x2 Your Bet Your Bet<br />

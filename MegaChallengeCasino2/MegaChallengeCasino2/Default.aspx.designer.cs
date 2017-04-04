@@ -76,12 +76,12 @@ namespace MegaChallengeCasino2 {
         protected global::System.Web.UI.WebControls.Label resultLabel;
         
         /// <summary>
-        /// moneyLabel control.
+        /// walletLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label moneyLabel;
+        protected global::System.Web.UI.WebControls.Label walletLabel;
     }
 }
