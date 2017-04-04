@@ -8,7 +8,8 @@ randomly selecting an image to a method like this:
 private string spinReel()
 {
   Random random = new Random();
-  string[] images = new string[] {"Strawberry", "Bar", "Lemon", "Bell", "Clover", "Cherry", "Diamond", "Orange", "Seven", "HorseShoe", "Plum", "Watermelon"};
+  string[] images = new string[] {"Strawberry", "Bar", "Lemon", 
+  "Bell", "Clover", "Cherry", "Diamond", "Orange", "Seven", "HorseShoe", "Plum", "Watermelon"};
   return images[random.Next(11)];
 }
 
@@ -35,7 +36,8 @@ Random random = new Random();
 
 private string spinReel()
 {
-  string[] images = new string[] {"Strawberry", "Bar", "Lemon", "Bell", "Clover", "Cherry", "Diamond", "Orange", "Seven", "HorseShoe", "Plum", "Watermelon"};
+  string[] images = new string[] {"Strawberry", "Bar", "Lemon", "Bell",
+   "Clover", "Cherry", "Diamond", "Orange", "Seven", "HorseShoe", "Plum", "Watermelon"};
   return images[random.Next(11)];
 }
 

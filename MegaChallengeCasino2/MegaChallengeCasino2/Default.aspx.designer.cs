@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MegaChallengeCasino {
+namespace MegaChallengeCasino2 {
     
     
     public partial class Default {
@@ -49,13 +49,13 @@ namespace MegaChallengeCasino {
         protected global::System.Web.UI.WebControls.Image thirdImage;
         
         /// <summary>
-        /// betTextBox control.
+        /// TextBox1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox betTextBox;
+        protected global::System.Web.UI.WebControls.TextBox TextBox1;
         
         /// <summary>
         /// leverButton control.

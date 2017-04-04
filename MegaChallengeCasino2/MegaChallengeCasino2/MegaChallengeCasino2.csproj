@@ -9,12 +9,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CE8AA3DA-A280-46CF-8B29-A052AE7AE3E1}</ProjectGuid>
+    <ProjectGuid>{98994C84-8703-409E-94E8-68F447FFD1A4}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MegaChallengeCasino</RootNamespace>
-    <AssemblyName>MegaChallengeCasino</AssemblyName>
+    <RootNamespace>MegaChallengeCasino2</RootNamespace>
+    <AssemblyName>MegaChallengeCasino2</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -66,6 +66,18 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\Bar.png" />
+    <Content Include="Images\Bell.png" />
+    <Content Include="Images\Cherry.png" />
+    <Content Include="Images\Clover.png" />
+    <Content Include="Images\Diamond.png" />
+    <Content Include="Images\HorseShoe.png" />
+    <Content Include="Images\Lemon.png" />
+    <Content Include="Images\Orange.png" />
+    <Content Include="Images\Plum.png" />
+    <Content Include="Images\Seven.png" />
+    <Content Include="Images\Strawberry.png" />
+    <Content Include="Images\Watermellon.png" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -75,6 +87,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Hint-About-Randomly-Choosing-Image.txt" />
+    <Content Include="Assets\Hint-Managing-the-Images.txt" />
+    <Content Include="Assets\Hint-Pseudo-Code-And-Method-Structure.txt" />
+    <Content Include="Assets\initial.png" />
+    <Content Include="Assets\loser.png" />
+    <Content Include="Assets\webform_layout.png" />
+    <Content Include="Assets\winner.png" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -94,7 +113,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="CS-ASP_034-Mega-Challenge_Code\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
@@ -110,9 +128,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>61619</DevelopmentServerPort>
+          <DevelopmentServerPort>56185</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:61619/</IISUrl>
+          <IISUrl>http://localhost:56185/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
