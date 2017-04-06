@@ -16,7 +16,7 @@
         <br />
         <br />
         Your Bet:
-        <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+        <asp:TextBox ID="betTextBox" runat="server"></asp:TextBox>
         <br />
         <br />
         <asp:Button ID="leverButton" runat="server" Text="Pull the Lever!" OnClick="leverButton_Click" />

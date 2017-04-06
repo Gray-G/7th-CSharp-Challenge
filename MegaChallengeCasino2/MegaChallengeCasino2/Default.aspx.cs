@@ -11,21 +11,27 @@ namespace MegaChallengeCasino2
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!Page.IsPostBack)
+            {
+                // Display Reel values
+                string[] reels = spinReel();
+                assignImagesToControls(reels);
+                ViewState.Add("PlayersWallet", 100);
+            }
         }
 
         protected void leverButton_Click(object sender, EventArgs e)
         {
-            decimal playersBet = 0.00M;
             decimal playersWallet = 100.00M;
+            decimal playersBet = 0.00M;
 
+            if (!decimal.TryParse(betTextBox.Text, out playersBet))
+                return;
 
             string[] threeImagesOnReel = spinReel();
 
             // Determine the value of the pull
             evaluateReel(threeImagesOnReel, playersBet, playersWallet);
-
-            // Set the player's new money total, persist it to ViewState
         }
 
         private string[] spinReel()
@@ -55,17 +61,6 @@ namespace MegaChallengeCasino2
                 "Seven", "HorseShoe", "Plum", "Watermelon"};
         }
 
-        private void assignImagesToControls(string[] imageDisplayArray)
-        {
-            // Concatenate a directory path as a string for the three random 
-            // images names and assign it as the imageUrl to server controls
-            firstImage.ImageUrl = "/Images/" + imageDisplayArray[0] + ".png";
-            secondImage.ImageUrl = "/Images/" + imageDisplayArray[1] + ".png";
-            thirdImage.ImageUrl = "/Images/" + imageDisplayArray[2] + ".png";
-
-            return;
-        }
-
         private void getThreeImages(string[] imageNameArray, string[] imageDisplayArray)
         {
             Random randomNumber = new Random();
@@ -79,49 +74,78 @@ namespace MegaChallengeCasino2
 
         private void evaluateReel(string[] threeImagesOnReel, decimal playersBet, decimal playersWallet)
         {
+            // Multiplier changes depending on reel evaluation
+            int multiplier = 1;
+
             // Check the three images for any "Bars"
-            if (isBarPresent(threeImagesOnReel))
-            {
-                updateLabels(0, playersBet, playersWallet);
-      
+            // If bars present, call noWinnings() helper
+            if (evaluateForBars(threeImagesOnReel, playersBet, playersWallet, multiplier))
                 return;
-            }
 
             // Check for "Cherries"
+            else if (evaluateForCherries(threeImagesOnReel, playersBet, playersWallet, multiplier))
+                return;
+
+            // Check for three "Sevens"
+            else if (evaluateForSevens(threeImagesOnReel, playersBet, playersWallet, multiplier))
+                return;
+
+            // If no combos are present, default to noWinnings()
+            else updateLabels(multiplier, playersBet);
+
+            return;
+        } 
+
+        private bool evaluateForBars(string[] threeImagesOnReel, decimal playersBet, decimal playersWallet, int multiplier)
+        {
+            // If "Bar" is present on the reel
+            if (isBarPresent(threeImagesOnReel))
+                // Execute updateLabels() with default multiplier = 1
+                updateLabels(multiplier, playersBet);
+
+            return false;
+        }
+
+        private bool evaluateForCherries(string[] threeImagesOnReel, decimal playersBet, decimal playersWallet, int multiplier)
+        {
             switch (areCherriesPresent(threeImagesOnReel))
             {
                 // Evaluate cases based on number of "Cherries" present
                 case 1:
-                {
-                    updateLabels(1, playersBet, playersWallet);
-                    return;
-                }
-            case 2:
-                {
-                    updateLabels(2, playersBet, playersWallet);
-                    return;
-                }
-            case 3:
-                {
-                    updateLabels(3, playersBet, playersWallet);
-                    return;
-                }
+                    {
+                        multiplier = 2;
+                        updateLabels(multiplier, playersBet);
+                        return true;
+                    }
+                case 2:
+                    {
+                        multiplier = 3;
+                        updateLabels(multiplier, playersBet);
+                        return true;
+                    }
+                case 3:
+                    {
+                        multiplier = 4;
+                        updateLabels(multiplier, playersBet);
+                        return true;
+                    }
+                default:
+                    return false;
             }
+        }
 
-
-            // Check for three "Sevens"
+        private bool evaluateForSevens(string[] threeImagesOnReel, decimal playersBet, decimal playersWallet, int multiplier)
+        {
             if (areThreeSevensPresent(threeImagesOnReel))
             {
-                updateLabels(4, playersBet, playersWallet);
+                multiplier = 100;
+                updateLabels(multiplier, playersBet);
 
-                return;
+                return true;
             }
 
-            // If no combos are present, default to scenario 0 (no winnings)
-            else updateLabels(0, playersBet, playersWallet);
-
-            return;
-        } 
+            return false;
+        }
 
         private bool isBarPresent(string[] threeImagesOnReel)
         {
@@ -167,65 +191,42 @@ namespace MegaChallengeCasino2
             else return false;
         }
 
-        private void updateLabels(int scenario, decimal playersBet, decimal playersWallet)
+        private void assignImagesToControls(string[] imageDisplayArray)
         {
-            switch (scenario)
-            {
-                case 0:
-                    {
-                        resultLabel.Text = $"Sorry, you lost {playersBet:C}. " +
-                            "Better luck next time.";
+            // Concatenate a directory path as a string for the three random 
+            // images names and assign it as the imageUrl to server controls
+            firstImage.ImageUrl = "/Images/" + imageDisplayArray[0] + ".png";
+            secondImage.ImageUrl = "/Images/" + imageDisplayArray[1] + ".png";
+            thirdImage.ImageUrl = "/Images/" + imageDisplayArray[2] + ".png";
 
-                        playersWallet -= playersBet;
-                        walletLabel.Text = $"{playersWallet:C}";
-
-                        return;
-                    }
-                case 1:
-                    {
-                        playersBet *= 2;
-                        resultLabel.Text = $"You bet {playersBet /= 2:C} and " +
-                            $"won {playersBet:C}!";
-
-                        playersWallet += playersBet;
-                        walletLabel.Text = $"{playersWallet:C}";
-
-                        return;
-                    }
-                case 2:
-                    {
-                        playersBet *= 3;
-                        resultLabel.Text = $"You bet {playersBet /= 3:C} and " +
-                            $"won {playersBet:C}!";
-
-                        playersWallet += playersBet;
-                        walletLabel.Text = $"{playersWallet:C}";
-
-                        return;
-                    }
-                case 3:
-                    {
-                        playersBet *= 4;
-                        resultLabel.Text = $"You bet {playersBet /= 4:C} and " +
-                            $"won {playersBet:C}!";
-
-                        playersWallet += playersBet;
-                        walletLabel.Text = $"{playersWallet:C}";
-
-                        return;
-                    }
-                case 4:
-                    {
-                        playersBet *= 100;
-                        resultLabel.Text = $"You bet {playersBet /= 100:C} and " +
-                            $"won {playersBet:C}!";
-
-                        playersWallet += playersBet;
-                        walletLabel.Text = $"{playersWallet:C}";
-
-                        return;
-                    }
-            }
+            return;
         }
+
+        private void updateLabels(int multiplier, decimal playersBet)
+        {
+
+            decimal playersWallet = decimal.Parse(ViewState["PlayersWallet"].ToString());
+
+            if (multiplier == 1)
+            { 
+                resultLabel.Text = $"Sorry, you lost {playersBet:C}. " +
+                    "Better luck next time.";
+
+                playersWallet -= playersBet;
+                walletLabel.Text = $"{playersWallet:C}";
+            }
+            else if (multiplier > 1)
+            { 
+                resultLabel.Text = $"You bet {playersBet:C} and " +
+                    $"won {playersBet *= multiplier:C}!";
+
+                playersWallet += playersBet;
+                walletLabel.Text = $"{playersWallet:C}";
+            } 
+
+            ViewState["PlayersWallet"] = playersWallet;
+
+            return;
+        }        
     }
 }
