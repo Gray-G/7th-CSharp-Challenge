@@ -22,16 +22,28 @@ namespace MegaChallengeCasino2
 
         protected void leverButton_Click(object sender, EventArgs e)
         {
-            decimal playersWallet = 100.00M;
+            decimal playersWallet = decimal.Parse(ViewState["PlayersWallet"].ToString());
             decimal playersBet = 0.00M;
 
             if (!decimal.TryParse(betTextBox.Text, out playersBet))
                 return;
 
+            if (playersBet > playersWallet)
+            {
+                insufficientFunds();
+                return;
+            }
+
             string[] threeImagesOnReel = spinReel();
 
             // Determine the value of the pull
             evaluateReel(threeImagesOnReel, playersBet, playersWallet);
+        }
+
+        private void insufficientFunds()
+        {
+            resultLabel.Text = "You do not have enough money to make that bet.";
+            return;
         }
 
         private string[] spinReel()
