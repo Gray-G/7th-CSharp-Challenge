@@ -77,10 +77,8 @@ namespace MegaChallengeCasino2
             // Multiplier changes depending on reel evaluation
             int multiplier = 1;
 
-            // Check the three images for any "Bars"
-            // If bars present, call noWinnings() helper
-            if (evaluateForBars(threeImagesOnReel, playersBet, playersWallet, multiplier))
-                return;
+            if (isBarPresent(threeImagesOnReel))
+                updateLabels(multiplier, playersBet);
 
             // Check for "Cherries"
             else if (evaluateForCherries(threeImagesOnReel, playersBet, playersWallet, multiplier))
@@ -90,21 +88,11 @@ namespace MegaChallengeCasino2
             else if (evaluateForSevens(threeImagesOnReel, playersBet, playersWallet, multiplier))
                 return;
 
-            // If no combos are present, default to noWinnings()
+            // If no combos are present, leave multiplier = 1 and call updateLabels()
             else updateLabels(multiplier, playersBet);
 
             return;
         } 
-
-        private bool evaluateForBars(string[] threeImagesOnReel, decimal playersBet, decimal playersWallet, int multiplier)
-        {
-            // If "Bar" is present on the reel
-            if (isBarPresent(threeImagesOnReel))
-                // Execute updateLabels() with default multiplier = 1
-                updateLabels(multiplier, playersBet);
-
-            return false;
-        }
 
         private bool evaluateForCherries(string[] threeImagesOnReel, decimal playersBet, decimal playersWallet, int multiplier)
         {
