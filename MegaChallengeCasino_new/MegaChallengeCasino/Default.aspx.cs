@@ -17,7 +17,7 @@ namespace MegaChallengeCasino
             if (!Page.IsPostBack)
             {
                 ViewState.Add("PlayersMoney", 100);
-                moneyLabel.Text = ViewState["PlayersMoney"].ToString();
+                moneyLabel.Text = $"{ViewState["PlayersMoney"]:C}";
                 ViewState.Add("ImageNames", initializeImageNames());
             }
         }
@@ -25,12 +25,21 @@ namespace MegaChallengeCasino
         protected void leverButton_Click(object sender, EventArgs e)
         {
             decimal playersBet = 0;
+            decimal playersMoney = decimal.Parse(ViewState["PlayersMoney"].ToString());
 
+            // Try and parse bet
             if (!decimal.TryParse(betTextBox.Text, out playersBet))
             {
                 resultLabel.Text = "Error parsing bet.";
                 return;
             }
+
+            // If player has insufficient funds to make playersBet, return
+            if (!hasFunds(playersBet, playersMoney))
+                return;
+
+            // Persist parsed bet to ViewState
+            ViewState.Add("PlayersBet", playersBet);
 
             // Retrieve image array from ViewState
             string[] imageNames = (string[])ViewState["ImageNames"];
@@ -46,6 +55,24 @@ namespace MegaChallengeCasino
 
             // Update money total and labels using multiplier
             updateResults(multiplier);
+        }
+
+        private bool hasFunds(decimal playersBet, decimal playersMoney)
+        {
+            // If players enters a bet of 0
+            if (playersBet == 0)
+            {
+                resultLabel.Text = "You must bet at least something.";
+                return false;
+            }
+            // If player doesn't have enough money for a bet
+            if (playersBet > playersMoney)
+            {
+                resultLabel.Text = "Insufficient funds to make that bet.";
+                return false;
+            }
+
+            else return true;
         }
 
         private string[] initializeImageNames()
@@ -103,7 +130,7 @@ namespace MegaChallengeCasino
             if (isThreeSevens(threeSlotsImages))
                 return 100;
 
-            else return -1; // Sentinel value which could be used in error reporting of function evaluateReels()
+            else return 1; // Default return value if no winnings
         }
 
         private bool isBar(string[] threeSlotsImages)
@@ -151,17 +178,28 @@ namespace MegaChallengeCasino
 
         private void updateResults(int multiplier)
         {
+            // Load bet and playersMoney from ViewState
+            decimal playersBet = decimal.Parse(ViewState["PlayersBet"].ToString());
+            decimal playersMoney = decimal.Parse(ViewState["PlayersMoney"].ToString());
+
             // Interpret winnings
             if (multiplier == 1)
             {
-                resultLabel.Text = $"Sorry, you lost {money:C}. Better luck next time.";
+                resultLabel.Text = $"Sorry, you lost {playersBet:C}. Better luck next time.";
+                playersMoney -= playersBet;
             }
-            if (multiplier == 2 || multiplier == 3 || multiplier == 4 )
+            else if (multiplier == 2 || multiplier == 3 || multiplier == 4 || multiplier == 100)
             {
-
+                resultLabel.Text = $"You bet {playersBet:C} and won {playersBet * multiplier:C}!";
+                playersMoney -= playersBet;
+                playersMoney += playersBet * multiplier;
             }
 
-            // Change playersMoney
+            // Change playersMoney and persist to ViewState, and update resultLabel.Text
+            moneyLabel.Text = $"{playersMoney:C}";
+            ViewState["PlayersMoney"] = playersMoney;
+
+            return;
         }
     }
 }
